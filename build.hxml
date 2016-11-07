@@ -1,0 +1,7 @@
+-main Seed
+
+-cp src
+
+-lib milkshake
+
+-js bin/app.js

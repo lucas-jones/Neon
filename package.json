@@ -1,0 +1,19 @@
+{
+	"name": "Milkshake-Seed",
+	"version": "0.0.1",
+	"description": "",
+	"main": "",
+	"author": "Lucas A Jones",
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-concurrent": "^0.5.0",
+		"grunt-contrib-connect": "^0.8.0",
+		"grunt-contrib-copy": "~0.5.0",
+		"grunt-contrib-watch": "^0.6.1",
+		"grunt-haxe": "^0.1.12",
+		"grunt-notify": "^0.3.0",
+		"grunt-open": "^0.2.3",
+		"grunt-shell": "~0.7.0",
+		"spritesheet-js": "^0.8.4"
+	}
+}

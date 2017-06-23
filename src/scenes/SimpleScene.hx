@@ -48,6 +48,10 @@ class SimpleScene extends Scene
 		
 		world.tweenFrom(2, { y: Globals.SCREEN_HEIGHT * 2 }).delay(1).ease(Elastic.easeOut);
 		logo.tweenFrom(1, { y: -200 }).delay(1).ease(Elastic.easeOut);
+
+		this.displayObject.filters = [
+			new filters.CRTFilter()
+		];
 	}
 
 	override public function update(deltaTime:Float):Void

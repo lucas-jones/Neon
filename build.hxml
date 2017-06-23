@@ -2,6 +2,14 @@
 
 -cp src
 
--lib milkshake
+-cp Milkshake/src
+-cp Milkshake/libs
+
+-lib compiletime
+-lib mconsole
+-lib nape
+-lib differ
+-lib pixijs
+-lib actuate
 
 -js bin/app.js

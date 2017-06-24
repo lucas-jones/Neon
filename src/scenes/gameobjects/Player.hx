@@ -131,8 +131,8 @@ class Player extends milkshake.core.DisplayObject
 				"minimumScaleMultiplier": 1
 			},
 			"color": {
-				"start": color == Color.RED ? "#0000ff" : "#ff0000",
-				"end": color == Color.RED ? "#0000ff" : "#ff0000"
+				"start": _color == Color.RED ? "#ff0000" : "#0099ff",
+				"end": _color == Color.RED ? "#ff0000": "#0099ff"
 			},
 			"speed": {
 				"start": 200,

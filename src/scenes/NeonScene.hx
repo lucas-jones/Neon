@@ -26,6 +26,7 @@ class NeonScene extends Scene
 	public static inline var RED:Int = 0xFF0000;
 	public static inline var BLUE:Int = 0x0099FF;
 
+	var startingPillar:Pillar;
 	var redPillars:Array<Pillar>;
 	var bluePillars:Array<Pillar>;
 
@@ -34,7 +35,7 @@ class NeonScene extends Scene
 
 	var verticalGridOffset:Float = 0;
 	var verticalGridGap:Float;
-	var speed:Float = 5;
+	var speed:Float = 0;
 
 	var gameColor:Int = RED;
 
@@ -58,9 +59,14 @@ class NeonScene extends Scene
 		bluePillars = [];
 
 		createPillars();
+		addNode(startingPillar = new Pillar(600, 250, RED), {
+			position: new Vector2(0, Globals.SCREEN_HEIGHT - 250)
+		});
+
+		redPillars.push(startingPillar);
 
 		addNode(player = new Player(gameColor), {
-			position: new Vector2(400, 0)
+			position: new Vector2(200, 340)
 		});
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
@@ -68,6 +74,11 @@ class NeonScene extends Scene
 		this.displayObject.filters = [
 			new filters.CRTFilter()
 		];
+
+		this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
+		{
+			this.tween(10, { speed: 10 }).ease(Sine.easeIn);
+		});
 	}
 
 	private function drawGrid():Void
@@ -123,7 +134,7 @@ class NeonScene extends Scene
 	{
 		for (i in 0 ... 10) {
 			var height:Float = 200 + (Math.random() * 200);
-			var x = i * 600;//(Math.random() * 3000);
+			var x = 800 + i * 600;//(Math.random() * 3000);
 
 			var pillar = new Pillar(200, height, 0xFF0000);
 
@@ -136,7 +147,7 @@ class NeonScene extends Scene
 
 		for (i in 0 ... 10) {
 			var height:Float = 200 + (Math.random() * 200);
-			var x = 300 + (i * 600);//(Math.random() * 3000);
+			var x = 800 + 300 + (i * 600);//(Math.random() * 3000);
 
 			var pillar = new Pillar(200, height, 0x0099FF);
 
@@ -165,7 +176,7 @@ class NeonScene extends Scene
 
 		for(pillar in pillars) {
 			pillar.x -= speed;
-			if(pillar.x < -200) pillar.x = 10 * 600;
+			if(pillar != startingPillar && pillar.x < -200) pillar.x = 10 * 600;
 		}
 
 		for(pillar in bluePillars) pillar.alpha = (gameColor == RED) ? 0.4 : 1;
@@ -205,7 +216,7 @@ class NeonScene extends Scene
 
     	}
 
-    	player.x -= 5; 
+    	player.x -= speed; 
     }
 
 	override public function update(deltaTime:Float):Void
@@ -217,7 +228,11 @@ class NeonScene extends Scene
 		{
 			gameColor = gameColor == RED ? BLUE : RED;
             player.color = gameColor;
+
+
 		}
+
+		untyped this.displayObject.filters[0].update(deltaTime);
 
 		super.update(deltaTime);
 

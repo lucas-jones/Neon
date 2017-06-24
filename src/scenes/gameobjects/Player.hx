@@ -59,7 +59,7 @@ class Player extends milkshake.core.DisplayObject
 
 	override public function update(deltaTime:Float):Void
 	{
-		velocity.y += 0.6;
+		velocity.y += 0.7;
 
 		if(position.y > 700)
 		{
@@ -71,9 +71,16 @@ class Player extends milkshake.core.DisplayObject
 			jump();
 		}
 
-		if(input.isDown(Key.RIGHT)) velocity.x = 10;
-		else if(input.isDown(Key.LEFT)) velocity.x = -10;
+		if(input.isUpOnce(Key.UP) && velocity.y < 0)
+		{
+			// velocity.y = 0;
+		}
+
+		if(input.isDown(Key.RIGHT)) velocity.x = onFloor ? 10 : 15;
+		else if(input.isDown(Key.LEFT)) velocity.x = onFloor ? -10 : -15;
 		else velocity.x = 0;
+
+		
 
 		position.add(velocity);
 
@@ -84,7 +91,7 @@ class Player extends milkshake.core.DisplayObject
 
 	public function jump()
 	{
-		velocity.y = -15;
+		velocity.y = -18;
 		// this.scale.tween(0.5, { x: 0.7, y: 1.3 }).ease(Sine.easeOut).onComplete(function()
 		// {
 		// 	this.scale.tween(0.8, { x: 1.3, y: 0.7 }).ease(Elastic.easeIn).delay(0);

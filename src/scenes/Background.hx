@@ -17,7 +17,9 @@ class Background extends Scene
 	var bgImage:Sprite;
 	var graphics(default, null):pixi.core.graphics.Graphics;
 
-	
+	var verticalGridOffset:Float = 0;
+	var verticalGridGap:Float;
+	var speed:Float = 5;
 
 	public function new()
 	{
@@ -38,7 +40,6 @@ class Background extends Scene
 		});
 
 		displayObject.addChild(graphics = new pixi.core.graphics.Graphics());
-		drawGrid();
 
 		this.displayObject.filters = [
 			new filters.CRTFilter()
@@ -47,6 +48,11 @@ class Background extends Scene
 
 	private function drawGrid(color = Color.RED, rows:Int = 25, columns:Int = 20):Void
 	{
+		var rows = 25;
+		var columns = 20;
+
+		verticalGridGap = Globals.SCREEN_WIDTH / columns * 2;
+
 		graphics.clear();
 
 		graphics.lineStyle(1, color);
@@ -72,21 +78,29 @@ class Background extends Scene
 		for (i in 0...columns) {
 			var offset = Globals.SCREEN_WIDTH / columns;
 
-			graphics.moveTo( -Globals.SCREEN_WIDTH / 2 + (i * offset) * 2, 0);
-			graphics.lineTo(i * offset, 200);
+			graphics.moveTo(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, 0);
+			graphics.lineTo(i * offset - verticalGridOffset / 2, 200);
 		}
 
 		// Bottom Vertical Lines
 		for (i in 0...columns) {
 			var offset = Globals.SCREEN_WIDTH / columns;
 
-			graphics.moveTo(i * offset, Globals.SCREEN_HEIGHT / 1.5);
-			graphics.lineTo(-Globals.SCREEN_WIDTH / 2 + (i * offset) * 2, Globals.SCREEN_HEIGHT);
+			graphics.moveTo(i * offset - verticalGridOffset / 2, Globals.SCREEN_HEIGHT / 1.5);
+			graphics.lineTo(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, Globals.SCREEN_HEIGHT);
 		}
 	}
 
 	override public function update(deltaTime:Float):Void
 	{
+		drawGrid();
+
+		verticalGridOffset += speed;
+
+		if(verticalGridOffset > verticalGridGap) {
+			verticalGridOffset = 0;
+		}
+
 		super.update(deltaTime);
 	}
 }

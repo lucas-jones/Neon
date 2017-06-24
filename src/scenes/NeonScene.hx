@@ -1,5 +1,6 @@
 package scenes;
 
+import milkshake.core.DisplayObject;
 import externs.SeedRandom;
 import pixi.extras.BitmapText;
 import scenes.NeonScene;
@@ -47,8 +48,11 @@ class NeonScene extends Scene
 
 	var score:Float = 0;
 	var scoreText:BitmapText;
+	var scoreContainer:DisplayObject;
 
 	var distAlongLine:Float = 0;
+
+	var isGameOver:Bool = false;
 
 	public function new()
 	{
@@ -105,14 +109,11 @@ class NeonScene extends Scene
 			position: new Vector2(200, 340)
 		});
 
-		
-
-		
-
-
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
-		displayObject.addChild(scoreText = new BitmapText("3213213", { font: "40px 8bit_wonder", tint: 0xFFFFFF}));
+		addNode(scoreContainer = new DisplayObject());
+
+		scoreContainer.displayObject.addChild(scoreText = new BitmapText("3213213", { font: "40px 8bit_wonder", tint: 0xFFFFFF}));
 		Reflect.setField(js.Browser.window, "text", scoreText);
 		scoreText.position.x = 1010;
 		scoreText.position.y = 30;
@@ -120,8 +121,6 @@ class NeonScene extends Scene
 		this.displayObject.filters = [
 			new filters.CRTFilter()
 		];
-
-
 	}
 
 	private function drawGrid():Void
@@ -273,22 +272,59 @@ class NeonScene extends Scene
 
     			player.position.y += result.separationY;
     			player.position.x += result.separationX;
-    			
-    		}
-    		else
-    		{
 
     		}
     	}
 
     	player.x -= speed; 
     }
+
+	public function gameOver():Void
+	{
+		scoreContainer.scale.tween(0.5, {x: 1.75, y: 1.75}).ease(Sine.easeOut);
+		scoreContainer.position.tween(0.5, {x: Globals.SCREEN_WIDTH / 2 - (scoreContainer.width), y: 250}).ease(Sine.easeOut).onComplete(function()
+		{
+			var gameOverContainer = new DisplayObject();
+			var gameOverText = new BitmapText("GAME OVER", { font: "85px 8bit_wonder", tint: 0xFFFFFF});
+			addNode(gameOverContainer,
+			{
+				position: new Vector2(275, 100)
+			});
+			gameOverContainer.displayObject.addChild(gameOverText);
+			gameOverContainer.alpha = 0;
+
+			gameOverContainer.tween(0.5, {alpha: 1}).ease(Sine.easeOut);
+
+
+			var contContainer = new DisplayObject();
+			var contText = new BitmapText("PRESS SPACEBAR TO CONTINUE", { font: "50px 8bit_wonder", tint: 0xFFFFFF});
+			addNode(contContainer,
+			{
+				position: new Vector2(50, 600)
+			});
+			contContainer.displayObject.addChild(contText);
+			contContainer.alpha = 0;
+
+			contContainer.tween(0.5, {alpha: 1}).ease(Sine.easeIn).repeat().reflect();
+
+			isGameOver = true;
+		});
+	}
+
     var started:Bool = false;
 	override public function update(deltaTime:Float):Void
 	{
+		if(isGameOver&& input.isEitherDown([Key.UP, Key.SPACE]))
+		{
+			var sceneManager = Milkshake.getInstance().scenes;
+			sceneManager.removeScene(scene.id);
+			sceneManager.addScene(new NeonScene());
+			return;
+		}
+
 		if(speed == 0 && started == false)
 		{
-			
+
 			if(input.isEitherDown([ Key.UP, Key.RIGHT, Key.LEFT, Key.SPACE ]))
 			{
 				started = true;
@@ -322,7 +358,7 @@ class NeonScene extends Scene
 		updateGrid();
 		updatePillars();
 
-		if(input.isDownOnce(Key.SPACE))
+		if(!player.dead && input.isDownOnce(Key.SPACE))
 		{
 			Milkshake.getInstance().sounds.playSound('assets/sounds/switch.mp3', true, false);
 			gameColor = gameColor == RED ? BLUE : RED;

@@ -74,6 +74,8 @@ class Player extends milkshake.core.DisplayObject
 		if(input.isDownOnce(Key.UP) && onFloor)
 		{
 			jump();
+
+			Milkshake.getInstance().sounds.playSound('assets/sounds/jump.mp3', true, false);
 		}
 
 		if(input.isUpOnce(Key.UP) && velocity.y < 0)
@@ -112,6 +114,8 @@ class Player extends milkshake.core.DisplayObject
 	public function die()
 	{
 		if(dead) return;
+
+		Milkshake.getInstance().sounds.playSound('assets/sounds/ded.mp3', true, false);
 
 		dead = true;
 		velocity.x = velocity.y = 0;

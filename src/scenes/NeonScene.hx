@@ -75,6 +75,30 @@ class NeonScene extends Scene
 
 		redPillars.push(startingPillar);
 
+
+		var test = new Pillar(1200, 250, RED);
+
+		cast addNode(test, {
+			position: new Vector2(6800, Globals.SCREEN_HEIGHT - 250)
+		});
+		redPillars.push(test);
+
+
+		var testa = new Pillar(1200, 50, BLUE);
+
+		cast addNode(testa, {
+			position: new Vector2(7300, Globals.SCREEN_HEIGHT - 400)
+		});
+		bluePillars.push(testa);
+
+		var testB = new Pillar(1200, 50, RED);
+
+		cast addNode(testB, {
+			position: new Vector2(8000, Globals.SCREEN_HEIGHT - 550)
+		});
+		redPillars.push(testB);
+
+
 		addNode(player = new Player(gameColor), {
 			position: new Vector2(200, 340)
 		});
@@ -193,7 +217,7 @@ class NeonScene extends Scene
 
 		for(pillar in pillars) {
 			pillar.x -= speed;
-			if(pillar != startingPillar && pillar.x < -200) pillar.x = 10 * 600;
+			// if(pillar != startingPillar && pillar.x < -200) pillar.x = 10 * 600;
 		}
 
 		for(pillar in bluePillars) pillar.alpha = (gameColor == RED) ? 0.4 : 1;
@@ -235,13 +259,16 @@ class NeonScene extends Scene
 
     	player.x -= speed; 
     }
-
+    var started:Bool = false;
 	override public function update(deltaTime:Float):Void
 	{
-		if(speed == 0)
+		if(speed == 0 && started == false)
 		{
+			
 			if(input.isEitherDown([ Key.UP, Key.RIGHT, Key.LEFT, Key.SPACE ]))
 			{
+				started = true;
+				Milkshake.getInstance().sounds.playSound('assets/sounds/totally_legit_royalty_free_2.mp3', true, true, 0.5);
 				if(NeonScene.GhostMovements != null) {
 					for (movements in NeonScene.GhostMovements) {
 						addNode(new GhostPlayer(movements.copy()), {
@@ -273,6 +300,7 @@ class NeonScene extends Scene
 
 		if(input.isDownOnce(Key.SPACE))
 		{
+			Milkshake.getInstance().sounds.playSound('assets/sounds/switch.mp3', true, false);
 			gameColor = gameColor == RED ? BLUE : RED;
             player.color = gameColor;
 		}

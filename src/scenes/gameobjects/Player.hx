@@ -181,14 +181,13 @@ class Player extends milkshake.core.DisplayObject
 
 		alpha = 0;
 
+		var neonScene:NeonScene = cast scene;
+		neonScene.gameOver();
+
 		haxe.Timer.delay(function() {
 			scene.removeNode(particles);
 			particles.emitter.destroy();
 			particles = null;
-
-			var sceneManager = Milkshake.getInstance().scenes;
-			sceneManager.removeScene(scene.id);
-			sceneManager.addScene(new NeonScene());
-		}, 3000);
+		}, 500);
 	}
 }

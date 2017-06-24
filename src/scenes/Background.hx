@@ -17,6 +17,8 @@ class Background extends Scene
 	var bgImage:Sprite;
 	var graphics(default, null):pixi.core.graphics.Graphics;
 
+	
+
 	public function new()
 	{
 		super("Background", [ "assets/images/bg.png" ], CameraPresets.DEFAULT, Color.BLUE);
@@ -30,6 +32,10 @@ class Background extends Scene
 //		{
 //			scale: Vector2.EQUAL(1.25)
 //		});
+
+		addNode(new scenes.gameobjects.Player(), {
+			position: new Vector2(400, 0)
+		});
 
 		displayObject.addChild(graphics = new pixi.core.graphics.Graphics());
 		drawGrid();

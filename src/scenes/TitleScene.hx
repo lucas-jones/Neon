@@ -57,6 +57,7 @@ class TitleScene extends Scene
 
 		text.position.x = 500;
 		text.position.y = 275;
+		text.alpha = 0;
 
 		text2.position.x = 500;
 		text2.position.y = 375;
@@ -67,7 +68,9 @@ class TitleScene extends Scene
 			new filters.CRTFilter()
 		];
 
-		text2.tween(0.5, {alpha: 1}).ease(Sine.easeIn).repeat().reflect();
+		text.tween(1.5, {alpha: 1}).ease(Sine.easeIn).onComplete(function() {
+			text2.tween(0.5, {alpha: 1}).ease(Sine.easeIn).repeat().reflect();
+		});
 		this.tween(5, { sceneAlpha: 1 }).ease(Sine.easeIn);
 		this.tween(100, { gameColor: Color.BLUE }).ease(Sine.easeInOut).repeat().reflect();
 	}

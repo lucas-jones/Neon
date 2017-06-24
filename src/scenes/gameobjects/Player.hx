@@ -24,6 +24,7 @@ class Player extends milkshake.core.DisplayObject
 {
 	public var color(default, set):Int;
 	public var polygon:Polygon;
+	public var dead(default, null):Bool = false;
 
 	var _color:Int;
 
@@ -66,12 +67,9 @@ class Player extends milkshake.core.DisplayObject
 
 	override public function update(deltaTime:Float):Void
 	{
-		velocity.y += 0.7;
+		if(dead) return;
 
-		if(position.y > 700)
-		{
-			velocity.y = 0;
-		}
+		velocity.y += 0.7;
 
 		if(input.isDownOnce(Key.UP) && onFloor)
 		{
@@ -87,12 +85,12 @@ class Player extends milkshake.core.DisplayObject
 		else if(input.isDown(Key.LEFT)) velocity.x = onFloor ? -10 : -15;
 		else velocity.x *= onFloor ? 0.3 : 0.8;
 
-		if(input.isDownOnce(Key.W))
+		position.add(velocity);
+
+		if(position.y > 600 || x < 100)
 		{
 			die();
 		}
-
-		position.add(velocity);
 
 		super.update(deltaTime);
 
@@ -113,6 +111,11 @@ class Player extends milkshake.core.DisplayObject
 
 	public function die()
 	{
+		if(dead) return;
+
+		dead = true;
+		velocity.x = velocity.y = 0;
+
 		scene.addNode(particles = new ParticleEmitter([
 			Texture.fromImage('assets/images/player/particles/Pixel25px.png'),
 			Texture.fromImage('assets/images/player/particles/Pixel50px.png'),
@@ -178,7 +181,10 @@ class Player extends milkshake.core.DisplayObject
 			scene.removeNode(particles);
 			particles.emitter.destroy();
 			particles = null;
-			alpha = 1;
+
+			var sceneManager = Milkshake.getInstance().scenes;
+			sceneManager.removeScene(scene.id);
+			sceneManager.addScene(new NeonScene());
 		}, 3000);
 	}
 }

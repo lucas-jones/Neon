@@ -1,5 +1,7 @@
 package scenes;
 
+import motion.actuators.IGenericActuator;
+import milkshake.utils.TweenUtils;
 import differ.Collision;
 import milkshake.Milkshake;
 import milkshake.assets.SpriteSheets;
@@ -41,6 +43,7 @@ class NeonScene extends Scene
 
 	var input:Input;
 	var player:Player;
+	var updateTween:IGenericActuator;
 
 	public function new()
 	{
@@ -75,9 +78,9 @@ class NeonScene extends Scene
 			new filters.CRTFilter()
 		];
 
-		this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
+		updateTween = this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
 		{
-			this.tween(10, { speed: 10 }).ease(Sine.easeIn);
+			updateTween = this.tween(10, { speed: 10 }).ease(Sine.easeIn);
 		});
 	}
 
@@ -185,6 +188,8 @@ class NeonScene extends Scene
 
     function checkCollision()
     {
+		if(player.dead) return;
+
     	player.alpha = 0.8;
     	player.onFloor = false;
 
@@ -212,7 +217,6 @@ class NeonScene extends Scene
     		{
 
     		}
-
     	}
 
     	player.x -= speed; 
@@ -227,8 +231,11 @@ class NeonScene extends Scene
 		{
 			gameColor = gameColor == RED ? BLUE : RED;
             player.color = gameColor;
+		}
 
-
+		if(player.dead) {
+			speed = 0;
+			motion.Actuate.stop(updateTween);
 		}
 
 		untyped this.displayObject.filters[0].update(deltaTime);

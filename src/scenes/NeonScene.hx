@@ -112,6 +112,7 @@ class NeonScene extends Scene
 			graphics.lineTo(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, Globals.SCREEN_HEIGHT);
 		}
 
+		bottomGraphics.clear();
 		bottomGraphics.beginFill(mode == MODE_RED ? RED : BLUE);
 		bottomGraphics.drawRect(0, Globals.SCREEN_HEIGHT - 30, Globals.SCREEN_WIDTH, 30);
 	}
@@ -174,7 +175,10 @@ class NeonScene extends Scene
 			pillar.x -= speed;
 			if(pillar.x < -200) pillar.x = 10 * 600;
 		}
-	}
+
+		for(pillar in bluePillars) pillar.alpha = (mode == MODE_RED) ? 0.4 : 1;
+		for(pillar in redPillars) pillar.alpha = (mode == MODE_BLUE) ? 0.4 : 1;
+ 	}
 
 	override public function update(deltaTime:Float):Void
 	{
@@ -185,6 +189,8 @@ class NeonScene extends Scene
 		{
 			mode = mode == MODE_RED ? MODE_BLUE : MODE_RED;
 		}
+
+
 
 		super.update(deltaTime);
 	}

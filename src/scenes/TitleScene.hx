@@ -72,7 +72,7 @@ class TitleScene extends Scene
 			text2.tween(0.5, {alpha: 1}).ease(Sine.easeIn).repeat().reflect();
 		});
 		this.tween(5, { sceneAlpha: 1 }).ease(Sine.easeIn);
-		this.tween(100000, { gameColor: Color.BLUE }).ease(Sine.easeInOut).repeat().reflect();
+		this.tween(100, { gameColor: Color.BLUE }).ease(Sine.easeInOut).repeat().reflect();
 	}
 
 	private function drawGrid():Void

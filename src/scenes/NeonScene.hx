@@ -389,6 +389,7 @@ class NeonScene extends Scene
 	}
 
     var started:Bool = false;
+	var sound:IWaudSound;
 	override public function update(deltaTime:Float):Void
 	{
 		if(isGameOver&& input.isEitherDown([Key.UP, Key.SPACE]))
@@ -396,6 +397,8 @@ class NeonScene extends Scene
 			var sceneManager = Milkshake.getInstance().scenes;
 			sceneManager.removeScene(scene.id);
 			sceneManager.addScene(new NeonScene());
+			sound.stop();
+
 			return;
 		}
 
@@ -405,7 +408,9 @@ class NeonScene extends Scene
 			if(input.isEitherDown([ Key.UP, Key.RIGHT, Key.LEFT, Key.SPACE ]))
 			{
 				started = true;
-				Milkshake.getInstance().sounds.playSound('assets/sounds/totally_legit_royalty_free_2.mp3', true, true, 0.5);
+				sound = Milkshake.getInstance().sounds.playSound('assets/sounds/totally_legit_royalty_free_2.mp3', true, true, 0.5);
+
+				sound.stop();
 				if(NeonScene.GhostMovements != null) {
 					for (movements in NeonScene.GhostMovements) {
 						ghostContainer.addNode(new GhostPlayer(movements.copy()), {

@@ -7,20 +7,13 @@ import motion.actuators.IGenericActuator;
 import milkshake.utils.TweenUtils;
 import differ.Collision;
 import milkshake.Milkshake;
-import milkshake.assets.SpriteSheets;
 import milkshake.components.input.Input;
 import milkshake.components.input.Key;
-import milkshake.core.DisplayObject;
-import milkshake.core.Graphics;
-import milkshake.core.Sprite;
 import milkshake.game.scene.camera.CameraPresets;
 import milkshake.game.scene.Scene;
 import milkshake.math.Vector2;
-import milkshake.utils.Color;
 import milkshake.utils.Globals;
-import motion.easing.Elastic;
 import motion.easing.Sine;
-import pixi.core.textures.Texture;
 import scenes.gameobjects.Pillar;
 import scenes.gameobjects.Player;
 
@@ -31,7 +24,8 @@ class NeonScene extends Scene
 	public static inline var RED:Int = 0xFF0000;
 	public static inline var BLUE:Int = 0x0099FF;
 
-	static var GhostMovements:Array<Vector2>;
+	static var GhostMovements:Array<Array<Vector2>>;
+	static var GhostIteration:Int = 0;
 
 	var startingPillar:Pillar;
 	var redPillars:Array<Pillar>;
@@ -83,12 +77,19 @@ class NeonScene extends Scene
 		});
 
 		if(NeonScene.GhostMovements != null) {
-			addNode(new GhostPlayer(NeonScene.GhostMovements.copy()), {
-				position: new Vector2(200, 340)
-			});
+			for (movements in NeonScene.GhostMovements) {
+				addNode(new GhostPlayer(movements.copy()), {
+					position: new Vector2(200, 340)
+				});
+			}
+
+			GhostIteration++;
+		} else {
+			NeonScene.GhostMovements = new Array<Array<Vector2>>();
 		}
 
-		NeonScene.GhostMovements = [];
+		NeonScene.GhostMovements[GhostIteration] = [];
+
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
@@ -273,7 +274,7 @@ class NeonScene extends Scene
 			speed = 0;
 			motion.Actuate.stop(updateTween);
 		} else {
-			NeonScene.GhostMovements.push(player.position.clone());
+			NeonScene.GhostMovements[GhostIteration].push(player.position.clone());
 		}
 
 		untyped this.displayObject.filters[0].update(deltaTime);

@@ -18,24 +18,32 @@ using milkshake.utils.TweenUtils;
 
 class Player extends milkshake.core.DisplayObject
 {
-	var input:Input;
+	public var color(default, set):Int;
+	var _color:Int;
 
+	var graphics:Graphics;
+	var input:Input;
 	var velocity:Vector2;
 
-	public function new()
+	public function new(color:Int = Color.RED)
 	{
 		super();
-		
-		var graphics = new Graphics();
 
-		graphics.graphics.beginFill(0xFF0000);
-		graphics.graphics.drawRect(-25, -40, 50, 80);
-
+		graphics = new Graphics();
 		addNode(graphics);
 
-		velocity = new Vector2();
+		this.color = color;
 
+		velocity = new Vector2();
 		input = new Input();
+	}
+
+	public function set_color(color:Int):Int
+	{
+		graphics.graphics.beginFill(color);
+		graphics.graphics.drawRect(-25, -40, 50, 80);
+
+		return _color = color;
 	}
 
 	override public function update(deltaTime:Float):Void

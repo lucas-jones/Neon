@@ -30,6 +30,7 @@ class NeonScene extends Scene
 	var bluePillars:Array<DisplayObject>;
 	var graphics(default, null):pixi.core.graphics.Graphics;
 	var bottomGraphics(default, null):pixi.core.graphics.Graphics;
+    var player:Player;
 
 	var verticalGridOffset:Float = 0;
 	var verticalGridGap:Float;
@@ -57,7 +58,7 @@ class NeonScene extends Scene
 
 		createPillars();
 
-		addNode(new Player(), {
+		addNode(player = new Player(), {
 			position: new Vector2(400, 0)
 		});
 
@@ -180,10 +181,16 @@ class NeonScene extends Scene
 		for(pillar in redPillars) pillar.alpha = (mode == MODE_BLUE) ? 0.4 : 1;
  	}
 
+    function checkCollision()
+    {
+        //player.color = Color.RED;
+    }
+
 	override public function update(deltaTime:Float):Void
 	{
 		updateGrid();
 		updatePillars();
+        checkCollision();
 
 		if(input.isDown(Key.SHIFT))
 		{

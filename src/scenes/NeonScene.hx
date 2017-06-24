@@ -1,5 +1,6 @@
 package scenes;
 
+import differ.Collision;
 import milkshake.assets.SpriteSheets;
 import milkshake.components.input.Input;
 import milkshake.components.input.Key;
@@ -14,29 +15,34 @@ import milkshake.utils.Globals;
 import motion.easing.Elastic;
 import motion.easing.Sine;
 import pixi.core.textures.Texture;
+import scenes.gameobjects.Pillar;
 import scenes.gameobjects.Player;
 
 using milkshake.utils.TweenUtils;
 
 class NeonScene extends Scene
 {
-	var redPillars:Array<DisplayObject>;
-	var bluePillars:Array<DisplayObject>;
+	public static inline var RED:Int = 0xFF0000;
+	public static inline var BLUE:Int = 0x0099FF;
+
+	var redPillars:Array<Pillar>;
+	var bluePillars:Array<Pillar>;
+
 	var graphics(default, null):pixi.core.graphics.Graphics;
 	var bottomGraphics(default, null):pixi.core.graphics.Graphics;
-    var player:Player;
 
 	var verticalGridOffset:Float = 0;
 	var verticalGridGap:Float;
-	var speed:Float = 5;
+	var speed:Float = 0;
 
-	var gameColor:Int = Color.RED;
+	var gameColor:Int = RED;
 
 	var input:Input;
+	var player:Player;
 
 	public function new()
 	{
-		super("NeonScene", [  ], CameraPresets.DEFAULT, Color.BLUE);
+		super("NeonScene", [  ], CameraPresets.DEFAULT, BLUE);
 
 		input = new Input();
 	}
@@ -118,7 +124,7 @@ class NeonScene extends Scene
 			var height:Float = 200 + (Math.random() * 200);
 			var x = i * 600;//(Math.random() * 3000);
 
-			var pillar = generatePillar(height, 0xFF0000);
+			var pillar = new Pillar(200, height, 0xFF0000);
 
 			addNode(pillar, {
 				position: new Vector2(x, Globals.SCREEN_HEIGHT - height)
@@ -131,7 +137,7 @@ class NeonScene extends Scene
 			var height:Float = 200 + (Math.random() * 200);
 			var x = 300 + (i * 600);//(Math.random() * 3000);
 
-			var pillar = generatePillar(height, 0x0099FF);
+			var pillar = new Pillar(200, height, 0x0099FF);
 
 			addNode(pillar, {
 				position: new Vector2(x, Globals.SCREEN_HEIGHT - height)
@@ -139,16 +145,6 @@ class NeonScene extends Scene
 
 			bluePillars.push(pillar);
 		}
-	}
-
-	function generatePillar(height:Float, color:Int):milkshake.core.DisplayObject
-	{
-		var displayObject = new Graphics();
-		displayObject.graphics.beginFill(0, 0.8);
-		displayObject.graphics.lineStyle(2, color);
-		displayObject.graphics.drawRect(0, 0, 200, height);
-
-		return displayObject;
 	}
 
 	function updateGrid()
@@ -171,29 +167,45 @@ class NeonScene extends Scene
 			if(pillar.x < -200) pillar.x = 10 * 600;
 		}
 
-		for(pillar in bluePillars) pillar.alpha = (gameColor == Color.RED) ? 0.4 : 1;
-		for(pillar in redPillars) pillar.alpha = (gameColor == Color.BLUE) ? 0.4 : 1;
+		for(pillar in bluePillars) pillar.alpha = (gameColor == RED) ? 0.4 : 1;
+		for(pillar in redPillars) pillar.alpha = (gameColor == BLUE) ? 0.4 : 1;
  	}
 
     function checkCollision()
     {
+    	player.alpha = 1;
+    	for(piller in redPillars.concat(bluePillars))
+    	{
+    		var result = Collision.shapeWithShape(player.polygon, piller.polygon);
 
+    		mconsole.Console.enterDebugger();
+
+    		if(result != null)
+    		{
+    			// trace("Collison");
+    			player.velocity.y = 0;
+    			player.alpha = 0.5;
+    			player.position.y += result.separationY;
+    			player.position.x += result.separationX;
+    		}
+
+    	}
     }
 
 	override public function update(deltaTime:Float):Void
 	{
 		updateGrid();
 		updatePillars();
-        checkCollision();
 
 		if(input.isDown(Key.SHIFT))
 		{
-			gameColor = gameColor == Color.RED ? Color.BLUE : Color.RED;
+			gameColor = gameColor == RED ? BLUE : RED;
             player.color = gameColor;
 		}
 
-
-
 		super.update(deltaTime);
+
+		checkCollision();
+
 	}
 }

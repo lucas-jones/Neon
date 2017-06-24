@@ -11,5 +11,6 @@
 -lib differ
 -lib pixijs
 -lib actuate
+-lib differ
 
 -js bin/app.js

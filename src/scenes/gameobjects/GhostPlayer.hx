@@ -13,8 +13,6 @@ class GhostPlayer extends milkshake.core.DisplayObject
     {
         super();
 
-        mconsole.Console.log(movement);
-
         this.movement = movement;
         graphics = new Graphics();
         addNode(graphics);

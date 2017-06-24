@@ -13,5 +13,6 @@
 -lib actuate
 -lib differ
 -lib pixi-particles
+-lib waud
 
 -js bin/app.js

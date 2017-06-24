@@ -49,6 +49,7 @@ class NeonScene extends Scene
 	var score:Float = 0;
 	var scoreText:BitmapText;
 	var scoreContainer:DisplayObject;
+	var ghostContainer:DisplayObject;
 
 	var distAlongLine:Float = 0;
 
@@ -104,6 +105,7 @@ class NeonScene extends Scene
 		});
 		redPillars.push(testB);
 
+		addNode(ghostContainer = new DisplayObject());
 
 		addNode(player = new Player(gameColor), {
 			position: new Vector2(200, 340)
@@ -262,8 +264,6 @@ class NeonScene extends Scene
 
     		if(result != null)
     		{
-    			// trace("Collison");
-
     			if(result.separationX == 0)
     			{
     				player.velocity.y = 0;
@@ -331,7 +331,7 @@ class NeonScene extends Scene
 				Milkshake.getInstance().sounds.playSound('assets/sounds/totally_legit_royalty_free_2.mp3', true, true, 0.5);
 				if(NeonScene.GhostMovements != null) {
 					for (movements in NeonScene.GhostMovements) {
-						addNode(new GhostPlayer(movements.copy()), {
+						ghostContainer.addNode(new GhostPlayer(movements.copy()), {
 							position: new Vector2(200, 340)
 						});
 					}

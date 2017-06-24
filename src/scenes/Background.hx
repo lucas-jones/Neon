@@ -26,16 +26,20 @@ class Background extends Scene
 	{
 		super.create();
 
-		addNode(new Sprite(Texture.fromImage("assets/images/bg.png")),
-		{
-			scale: Vector2.EQUAL(1.25)
-		});
+//		addNode(new Sprite(Texture.fromImage("assets/images/bg.png")),
+//		{
+//			scale: Vector2.EQUAL(1.25)
+//		});
 
 		displayObject.addChild(graphics = new pixi.core.graphics.Graphics());
 		drawGrid();
+
+		this.displayObject.filters = [
+			new filters.CRTFilter()
+		];
 	}
 
-	private function drawGrid(color = Color.GREEN, rows:Int = 25, columns:Int = 20):Void
+	private function drawGrid(color = Color.RED, rows:Int = 25, columns:Int = 20):Void
 	{
 		graphics.clear();
 

@@ -83,11 +83,11 @@ class Player extends milkshake.core.DisplayObject
 
 		if(input.isDown(Key.RIGHT)) velocity.x = onFloor ? 10 : 15;
 		else if(input.isDown(Key.LEFT)) velocity.x = onFloor ? -10 : -15;
-		else velocity.x *= onFloor ? 0.3 : 0.8;
+		else velocity.x *= onFloor ? 0.3 : 0.9;
 
 		position.add(velocity);
 
-		if(position.y > 600 || x < 100)
+		if(position.y > 690 || x < 0)
 		{
 			die();
 		}

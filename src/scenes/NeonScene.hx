@@ -1,5 +1,6 @@
 package scenes;
 
+import pixi.extras.BitmapText;
 import scenes.NeonScene;
 import scenes.gameobjects.GhostPlayer;
 import motion.actuators.IGenericActuator;
@@ -49,9 +50,12 @@ class NeonScene extends Scene
 	var player:Player;
 	var updateTween:IGenericActuator;
 
+	var score:Float = 0;
+	var scoreText:BitmapText;
+
 	public function new()
 	{
-		super("NeonScene", [  ], CameraPresets.DEFAULT, BLUE);
+		super("NeonScene", [ 'assets/fonts/8bit_wonder/8bit_wonder.fnt' ], CameraPresets.DEFAULT, BLUE);
 
 		input = Milkshake.getInstance().input;
 	}
@@ -59,6 +63,8 @@ class NeonScene extends Scene
 	override public function create():Void
 	{
 		super.create();
+
+		score = 0;
 
 		displayObject.addChild(graphics = new pixi.core.graphics.Graphics());
 
@@ -86,14 +92,16 @@ class NeonScene extends Scene
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
+		displayObject.addChild(scoreText = new BitmapText("3213213", { font: "40px 8bit_wonder", tint: 0xFFFFFF}));
+		Reflect.setField(js.Browser.window, "text", scoreText);
+		scoreText.position.x = 1010;
+		scoreText.position.y = 30;
+
 		this.displayObject.filters = [
 			new filters.CRTFilter()
 		];
 
-		updateTween = this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
-		{
-			updateTween = this.tween(10, { speed: 10 }).ease(Sine.easeIn);
-		});
+		
 	}
 
 	private function drawGrid():Void
@@ -236,6 +244,22 @@ class NeonScene extends Scene
 
 	override public function update(deltaTime:Float):Void
 	{
+		if(speed == 0)
+		{
+			if(input.isEitherDown([ Key.UP, Key.RIGHT, Key.LEFT, Key.SPACE ]))
+			{
+				updateTween = this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
+				{
+					updateTween = this.tween(10, { speed: 10 }).ease(Sine.easeIn);
+				});
+			}
+		}
+
+		score += speed;
+
+		scoreText.text = "SCORE: " + Std.string(Std.int(score));
+		scoreText.x = 30;
+
 		updateGrid();
 		updatePillars();
 

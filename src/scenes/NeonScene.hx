@@ -1,5 +1,7 @@
 package scenes;
 
+import scenes.NeonScene;
+import scenes.gameobjects.GhostPlayer;
 import motion.actuators.IGenericActuator;
 import milkshake.utils.TweenUtils;
 import differ.Collision;
@@ -27,6 +29,8 @@ class NeonScene extends Scene
 {
 	public static inline var RED:Int = 0xFF0000;
 	public static inline var BLUE:Int = 0x0099FF;
+
+	static var GhostMovements:Array<Vector2>;
 
 	var startingPillar:Pillar;
 	var redPillars:Array<Pillar>;
@@ -71,6 +75,14 @@ class NeonScene extends Scene
 		addNode(player = new Player(gameColor), {
 			position: new Vector2(200, 340)
 		});
+
+		if(NeonScene.GhostMovements != null) {
+			addNode(new GhostPlayer(NeonScene.GhostMovements.copy()), {
+				position: new Vector2(200, 340)
+			});
+		}
+
+		NeonScene.GhostMovements = [];
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
@@ -236,6 +248,8 @@ class NeonScene extends Scene
 		if(player.dead) {
 			speed = 0;
 			motion.Actuate.stop(updateTween);
+		} else {
+			NeonScene.GhostMovements.push(player.position.clone());
 		}
 
 		untyped this.displayObject.filters[0].update(deltaTime);

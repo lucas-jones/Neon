@@ -48,6 +48,8 @@ class NeonScene extends Scene
 	var score:Float = 0;
 	var scoreText:BitmapText;
 
+	var distAlongLine:Float = 0;
+
 	public function new()
 	{
 		super("NeonScene", [ 'assets/fonts/8bit_wonder/8bit_wonder.fnt' ], CameraPresets.DEFAULT, BLUE);
@@ -127,6 +129,9 @@ class NeonScene extends Scene
 		var rows = 25;
 		var columns = 20;
 
+		distAlongLine+= 0.005;
+		if(distAlongLine > 1) distAlongLine = 0;
+
 		verticalGridGap = Globals.SCREEN_WIDTH / columns * 2;
 
 		graphics.clear();
@@ -154,21 +159,40 @@ class NeonScene extends Scene
 		for (i in 0...columns) {
 			var offset = Globals.SCREEN_WIDTH / columns;
 
-			graphics.moveTo(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, 0);
-			graphics.lineTo(i * offset - verticalGridOffset / 2, 200);
+			var pointA = new Vector2(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, 0);
+			var pointB = new Vector2(i * offset - verticalGridOffset / 2, 200);
+
+			graphics.moveTo(pointA.x, pointA.y);
+			graphics.lineTo(pointB.x, pointB.y);
+
+			var midPoint = pointAlongLine(pointA, pointB, 1 - distAlongLine);
+			graphics.beginFill(gameColor);
+			graphics.drawCircle(midPoint.x, midPoint.y, 2);
 		}
 
 		// Bottom Vertical Lines
 		for (i in 0...columns) {
 			var offset = Globals.SCREEN_WIDTH / columns;
 
-			graphics.moveTo(i * offset - verticalGridOffset / 2, Globals.SCREEN_HEIGHT / 1.5);
-			graphics.lineTo(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, Globals.SCREEN_HEIGHT);
+			var pointA = new Vector2(i * offset - verticalGridOffset / 2, Globals.SCREEN_HEIGHT / 1.5);
+			var pointB = new Vector2(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, Globals.SCREEN_HEIGHT);
+
+			graphics.moveTo(pointA.x, pointA.y);
+			graphics.lineTo(pointB.x, pointB.y);
+
+			var midPoint = pointAlongLine(pointA, pointB, distAlongLine);
+			graphics.beginFill(gameColor);
+			graphics.drawCircle(midPoint.x, midPoint.y, 2);
 		}
 
 		bottomGraphics.clear();
 		bottomGraphics.beginFill(gameColor);
 		bottomGraphics.drawRect(0, Globals.SCREEN_HEIGHT - 30, Globals.SCREEN_WIDTH, 30);
+	}
+
+	function pointAlongLine(pointA:Vector2, pointB:Vector2, percent:Float)
+	{
+		return new Vector2(pointA.x + (pointB.x - pointA.x) * percent, pointA.y + (pointB.y - pointA.y) * percent);
 	}
 
 	function createPillars()

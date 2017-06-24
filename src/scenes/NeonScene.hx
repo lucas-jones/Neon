@@ -99,7 +99,7 @@ class NeonScene extends Scene
 		}
 	}
 
-	function createPillars():Void
+	function createPillars()
 	{
 		for (i in 0 ... 10) {
 			var height:Float = 200 + (Math.random() * 200);
@@ -138,7 +138,7 @@ class NeonScene extends Scene
 		return displayObject;
 	}
 
-	override public function update(deltaTime:Float):Void
+	function updateGrid()
 	{
 		drawGrid();
 
@@ -147,9 +147,18 @@ class NeonScene extends Scene
 		if(verticalGridOffset > verticalGridGap) {
 			verticalGridOffset = 0;
 		}
+	}
 
-		for(pillar in redPillars) pillar.x -= 3;
-		for(pillar in bluePillars) pillar.x -= 3;
+	function updatePillars()
+	{
+		for(pillar in redPillars) pillar.x -= speed;
+		for(pillar in bluePillars) pillar.x -= speed;
+	}
+
+	override public function update(deltaTime:Float):Void
+	{
+		updateGrid();
+		updatePillars();
 
 		super.update(deltaTime);
 	}

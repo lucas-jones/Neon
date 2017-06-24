@@ -24,7 +24,7 @@ class GhostPlayer extends milkshake.core.DisplayObject
         graphics.graphics.drawRect(-15, -5, 9, 9);
         graphics.graphics.drawRect(10, -5, 9, 9);
 
-        alpha = 0.3;
+        alpha = 0.15;
     }
 
     override public function update(deltaTime:Float):Void

@@ -52,10 +52,10 @@ class TitleScene extends Scene
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
-		displayObject.addChild(text = new pixi.extras.BitmapText("NEON", { font: "75px 8bit_wonder", tint: 0xFFFFFF}));
+		displayObject.addChild(text = new pixi.extras.BitmapText("N E O N", { font: "75px 8bit_wonder", tint: 0xFFFFFF}));
 		displayObject.addChild(text2 = new pixi.extras.BitmapText("INSERT COIN", { font: "32px 8bit_wonder", tint: 0xFFFFFF}));
 
-		text.position.x = 500;
+		text.position.x = 450;
 		text.position.y = 275;
 		text.alpha = 0;
 
@@ -72,7 +72,7 @@ class TitleScene extends Scene
 			text2.tween(0.5, {alpha: 1}).ease(Sine.easeIn).repeat().reflect();
 		});
 		this.tween(5, { sceneAlpha: 1 }).ease(Sine.easeIn);
-		this.tween(100, { gameColor: Color.BLUE }).ease(Sine.easeInOut).repeat().reflect();
+		this.tween(100000, { gameColor: Color.BLUE }).ease(Sine.easeInOut).repeat().reflect();
 	}
 
 	private function drawGrid():Void

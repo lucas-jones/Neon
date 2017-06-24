@@ -75,7 +75,7 @@ class Player extends milkshake.core.DisplayObject
 		{
 			jump();
 
-			Milkshake.getInstance().sounds.playSound('assets/sounds/jump.mp3', true, false);
+			Milkshake.getInstance().sounds.playSound('assets/sounds/jump.mp3', true, false, 0.2);
 		}
 
 		if(input.isUpOnce(Key.UP) && velocity.y < 0)

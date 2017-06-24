@@ -75,34 +75,7 @@ class NeonScene extends Scene
 		bluePillars = [];
 
 		createPillars();
-		addNode(startingPillar = new Pillar(600, 250, RED), {
-			position: new Vector2(0, Globals.SCREEN_HEIGHT - 250)
-		});
-
-		redPillars.push(startingPillar);
-
-
-		var test = new Pillar(1200, 250, RED);
-
-		cast addNode(test, {
-			position: new Vector2(6800, Globals.SCREEN_HEIGHT - 250)
-		});
-		redPillars.push(test);
-
-
-		var testa = new Pillar(1200, 50, BLUE);
-
-		cast addNode(testa, {
-			position: new Vector2(7300, Globals.SCREEN_HEIGHT - 400)
-		});
-		bluePillars.push(testa);
-
-		var testB = new Pillar(1200, 50, RED);
-
-		cast addNode(testB, {
-			position: new Vector2(8000, Globals.SCREEN_HEIGHT - 550)
-		});
-		redPillars.push(testB);
+		
 
 
 		addNode(player = new Player(gameColor), {
@@ -196,7 +169,7 @@ class NeonScene extends Scene
 
 	function createPillars()
 	{
-		for (i in 0 ... 10) {
+		for (i in 0 ... 3) {
 			var height:Float = 200 + (Math.random() * 200);
 			var x = 800 + i * 600;//(Math.random() * 3000);
 
@@ -209,9 +182,25 @@ class NeonScene extends Scene
 			redPillars.push(pillar);
 		}
 
+		var pillar:Pillar;
+
+		addNode(pillar = new Pillar(400, 250, RED), {
+			position: new Vector2(2500, Globals.SCREEN_HEIGHT - 250)
+		});
+
+		redPillars.push(pillar);
+
+		var pillar:Pillar;
+
+		addNode(pillar = new Pillar(400, 250, BLUE), {
+			position: new Vector2(2500 + 800, Globals.SCREEN_HEIGHT - 250)
+		});
+
+		bluePillars.push(pillar);
+
 		for (i in 0 ... 10) {
 			var height:Float = 200 + (Math.random() * 200);
-			var x = 800 + 300 + (i * 600);//(Math.random() * 3000);
+			var x = 3000 + 800 + 300 + (i * 600);//(Math.random() * 3000);
 
 			var pillar = new Pillar(200, height, 0x0099FF);
 
@@ -221,6 +210,94 @@ class NeonScene extends Scene
 
 			bluePillars.push(pillar);
 		}
+
+		
+
+		addNode(startingPillar = new Pillar(600, 250, RED), {
+			position: new Vector2(0, Globals.SCREEN_HEIGHT - 250)
+		});
+
+		redPillars.push(startingPillar);
+
+
+		var test = new Pillar(1200, 250, RED);
+
+		cast addNode(test, {
+			position: new Vector2(6800 + 3300, Globals.SCREEN_HEIGHT - 250)
+		});
+		redPillars.push(test);
+
+
+		var testa = new Pillar(1200, 50, BLUE);
+
+		cast addNode(testa, {
+			position: new Vector2(7300+ 3300 + 500, Globals.SCREEN_HEIGHT - 400)
+		});
+		bluePillars.push(testa);
+
+		var testB = new Pillar(1200, 50, RED);
+
+		cast addNode(testB, {
+			position: new Vector2(8000+ 3300 + 2000 - 1300, Globals.SCREEN_HEIGHT - 550)
+		});
+		redPillars.push(testB);
+
+		for (i in 0 ... 10) {
+			var height:Float = 100 + (Math.random() * 300);
+			var x = 1200 + 8000 + 3300 + 800 + 300 + (i * 600);//(Math.random() * 3000);
+
+			var pillar = new Pillar(200, height, 0x0099FF);
+
+			addNode(pillar, {
+				position: new Vector2(x, Globals.SCREEN_HEIGHT - height)
+			});
+
+			bluePillars.push(pillar);
+		}
+
+
+		for (i in 0 ... 10) {
+			var height:Float = 200 + (Math.random() * 250);
+			var x = 6000 + 1200 + 8000 + 3300 + 800 + 300 + (i * 1300);//(Math.random() * 3000);
+
+			var pillar = new Pillar(200, height, RED);
+
+			addNode(pillar, {
+				position: new Vector2(x, Globals.SCREEN_HEIGHT - height)
+			});
+
+			redPillars.push(pillar);
+		}
+
+
+		for (i in 0 ... 10) {
+			var height:Float = 200 + (Math.random() * 250);
+			var x = 600 + 6000 + 1200 + 8000 + 3300 + 800 + 300 + (i * 1300);//(Math.random() * 3000);
+
+			var pillar = new Pillar(200, height, BLUE);
+
+			addNode(pillar, {
+				position: new Vector2(x, Globals.SCREEN_HEIGHT - height)
+			});
+
+			bluePillars.push(pillar);
+		}
+
+
+		for (i in 0 ... 10) {
+			var height:Float = 200 + (Math.random() * 250);
+			var x = 12000 + 600 + 6000 + 1200 + 8000 + 3300 + 800 + 300 + (i * 900);//(Math.random() * 3000);
+
+			var pillar = new Pillar(200, height, BLUE);
+
+			addNode(pillar, {
+				position: new Vector2(x, Globals.SCREEN_HEIGHT - height)
+			});
+
+			bluePillars.push(pillar);
+		}
+
+
 	}
 
 	function updateGrid()
@@ -345,7 +422,7 @@ class NeonScene extends Scene
 
 				updateTween = this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
 				{
-					updateTween = this.tween(10, { speed: 10 }).ease(Sine.easeIn);
+					updateTween = this.tween(5, { speed: 10 }).ease(Sine.easeIn);
 				});
 			}
 		}

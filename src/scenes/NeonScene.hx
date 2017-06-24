@@ -34,7 +34,7 @@ class NeonScene extends Scene
 
 	var verticalGridOffset:Float = 0;
 	var verticalGridGap:Float;
-	var speed:Float = 0;
+	var speed:Float = 5;
 
 	var gameColor:Int = RED;
 
@@ -175,22 +175,37 @@ class NeonScene extends Scene
     function checkCollision()
     {
     	player.alpha = 1;
-    	for(piller in redPillars.concat(bluePillars))
+    	player.onFloor = false;
+
+    	var pillars = gameColor == RED ? redPillars : bluePillars;
+
+    	for(piller in pillars)
     	{
     		var result = Collision.shapeWithShape(player.polygon, piller.polygon);
-
-    		mconsole.Console.enterDebugger();
 
     		if(result != null)
     		{
     			// trace("Collison");
-    			player.velocity.y = 0;
+
+    			if(result.separationX == 0)
+    			{
+    				player.velocity.y = 0;
+    				player.onFloor = true;
+    			}
+
     			player.alpha = 0.5;
     			player.position.y += result.separationY;
     			player.position.x += result.separationX;
+    			
+    		}
+    		else
+    		{
+
     		}
 
     	}
+
+    	player.x -= 5; 
     }
 
 	override public function update(deltaTime:Float):Void
@@ -198,7 +213,7 @@ class NeonScene extends Scene
 		updateGrid();
 		updatePillars();
 
-		if(input.isDownOnce(Key.SHIFT))
+		if(input.isDownOnce(Key.SPACE))
 		{
 			gameColor = gameColor == RED ? BLUE : RED;
             player.color = gameColor;

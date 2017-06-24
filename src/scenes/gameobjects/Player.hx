@@ -1,5 +1,6 @@
 package scenes.gameobjects;
 
+import milkshake.Milkshake;
 import milkshake.assets.SpriteSheets;
 import milkshake.components.input.Input;
 import milkshake.components.input.Key;
@@ -22,8 +23,8 @@ class Player extends milkshake.core.DisplayObject
 	var _color:Int;
 
 	var graphics:Graphics;
-	var input:Input;
 	var velocity:Vector2;
+	var input:Input;
 
 	public function new(color:Int = Color.RED)
 	{
@@ -35,7 +36,7 @@ class Player extends milkshake.core.DisplayObject
 		this.color = color;
 
 		velocity = new Vector2();
-		input = new Input();
+		input = Milkshake.getInstance().input;
 	}
 
 	public function set_color(color:Int):Int

@@ -185,7 +185,7 @@ class NeonScene extends Scene
 
     function checkCollision()
     {
-    	player.alpha = 1;
+    	player.alpha = 0.8;
     	player.onFloor = false;
 
     	var pillars = gameColor == RED ? redPillars : bluePillars;
@@ -204,7 +204,6 @@ class NeonScene extends Scene
     				player.onFloor = true;
     			}
 
-    			player.alpha = 0.5;
     			player.position.y += result.separationY;
     			player.position.x += result.separationX;
     			

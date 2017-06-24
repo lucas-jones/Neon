@@ -13,6 +13,7 @@ import milkshake.game.scene.Scene;
 import milkshake.math.Vector2;
 import milkshake.utils.Color;
 import milkshake.utils.Globals;
+import milkshake.utils.MathHelper;
 import motion.easing.Elastic;
 import motion.easing.Sine;
 import pixi.core.textures.Texture;
@@ -56,6 +57,10 @@ class Player extends milkshake.core.DisplayObject
 		graphics.graphics.beginFill(color);
 		graphics.graphics.drawRect(-20, -20, 40, 40);
 
+		graphics.graphics.beginFill(0);
+		graphics.graphics.drawRect(-15, -5, 9, 9);
+		graphics.graphics.drawRect(10, -5, 9, 9);
+
 		return _color = color;
 	}
 
@@ -80,7 +85,7 @@ class Player extends milkshake.core.DisplayObject
 
 		if(input.isDown(Key.RIGHT)) velocity.x = onFloor ? 10 : 15;
 		else if(input.isDown(Key.LEFT)) velocity.x = onFloor ? -10 : -15;
-		else velocity.x = 0;
+		else velocity.x *= onFloor ? 0.3 : 0.8;
 
 		if(input.isDownOnce(Key.W))
 		{
@@ -97,10 +102,13 @@ class Player extends milkshake.core.DisplayObject
 	public function jump()
 	{
 		velocity.y = -18;
-		// this.scale.tween(0.5, { x: 0.7, y: 1.3 }).ease(Sine.easeOut).onComplete(function()
-		// {
-		// 	this.scale.tween(0.8, { x: 1.3, y: 0.7 }).ease(Elastic.easeIn).delay(0);
-		// });
+		this.scale.tween(0.15, { x: 0.7, y: 1.3 }).ease(Sine.easeOut).onComplete(function()
+		{
+			this.scale.tween(0.4, { x: 1.2, y: 0.9 }).ease(Sine.easeOut).onComplete(function()
+			{
+				this.scale.tween(0.2, { x: 1, y: 1 }).ease(Sine.easeOut);
+			});
+		});
 	}
 
 	public function die()

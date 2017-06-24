@@ -1,5 +1,6 @@
 package scenes;
 
+import externs.SeedRandom;
 import pixi.extras.BitmapText;
 import scenes.NeonScene;
 import scenes.gameobjects.GhostPlayer;
@@ -60,6 +61,8 @@ class NeonScene extends Scene
 
 		score = 0;
 
+		SeedRandom.seedrandom("barry");
+
 		displayObject.addChild(graphics = new pixi.core.graphics.Graphics());
 
 		redPillars = [];
@@ -76,19 +79,9 @@ class NeonScene extends Scene
 			position: new Vector2(200, 340)
 		});
 
-		if(NeonScene.GhostMovements != null) {
-			for (movements in NeonScene.GhostMovements) {
-				addNode(new GhostPlayer(movements.copy()), {
-					position: new Vector2(200, 340)
-				});
-			}
+		
 
-			GhostIteration++;
-		} else {
-			NeonScene.GhostMovements = new Array<Array<Vector2>>();
-		}
-
-		NeonScene.GhostMovements[GhostIteration] = [];
+		
 
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
@@ -102,7 +95,7 @@ class NeonScene extends Scene
 			new filters.CRTFilter()
 		];
 
-		
+
 	}
 
 	private function drawGrid():Void
@@ -249,6 +242,20 @@ class NeonScene extends Scene
 		{
 			if(input.isEitherDown([ Key.UP, Key.RIGHT, Key.LEFT, Key.SPACE ]))
 			{
+				if(NeonScene.GhostMovements != null) {
+					for (movements in NeonScene.GhostMovements) {
+						addNode(new GhostPlayer(movements.copy()), {
+							position: new Vector2(200, 340)
+						});
+					}
+
+					GhostIteration++;
+				} else {
+					NeonScene.GhostMovements = new Array<Array<Vector2>>();
+				}
+
+				NeonScene.GhostMovements[GhostIteration] = [];
+
 				updateTween = this.tween(3, { speed: 5 }).ease(Sine.easeIn).onComplete(function()
 				{
 					updateTween = this.tween(10, { speed: 10 }).ease(Sine.easeIn);
@@ -274,7 +281,7 @@ class NeonScene extends Scene
 			speed = 0;
 			motion.Actuate.stop(updateTween);
 		} else {
-			NeonScene.GhostMovements[GhostIteration].push(player.position.clone());
+			if(speed != 0) NeonScene.GhostMovements[GhostIteration].push(player.position.clone());
 		}
 
 		untyped this.displayObject.filters[0].update(deltaTime);

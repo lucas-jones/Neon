@@ -151,8 +151,12 @@ class NeonScene extends Scene
 
 	function updatePillars()
 	{
-		for(pillar in redPillars) pillar.x -= speed;
-		for(pillar in bluePillars) pillar.x -= speed;
+		var pillars = redPillars.concat(bluePillars);
+
+		for(pillar in pillars) {
+			pillar.x -= speed;
+			if(pillar.x < -200) pillar.x = 10 * 600;
+		}
 	}
 
 	override public function update(deltaTime:Float):Void

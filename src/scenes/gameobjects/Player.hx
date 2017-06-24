@@ -26,15 +26,11 @@ class Player extends milkshake.core.DisplayObject
 	var _color:Int;
 
 	var graphics:Graphics;
-<<<<<<< HEAD
 	var input:Input;
+
 	public var velocity:Vector2;
 
 	var lastPositions:Array<Vector2>;
-=======
-	var velocity:Vector2;
-	var input:Input;
->>>>>>> 79d219df4da7de3153f2ae8677a06e1174bb9d7e
 
 	public function new(color:Int = Color.RED)
 	{

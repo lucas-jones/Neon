@@ -1,6 +1,7 @@
 package scenes;
 
 import differ.Collision;
+import milkshake.Milkshake;
 import milkshake.assets.SpriteSheets;
 import milkshake.components.input.Input;
 import milkshake.components.input.Key;
@@ -44,7 +45,7 @@ class NeonScene extends Scene
 	{
 		super("NeonScene", [  ], CameraPresets.DEFAULT, BLUE);
 
-		input = new Input();
+		input = Milkshake.getInstance().input;
 	}
 
 	override public function create():Void
@@ -197,7 +198,7 @@ class NeonScene extends Scene
 		updateGrid();
 		updatePillars();
 
-		if(input.isDown(Key.SHIFT))
+		if(input.isDownOnce(Key.SHIFT))
 		{
 			gameColor = gameColor == RED ? BLUE : RED;
             player.color = gameColor;
@@ -206,6 +207,5 @@ class NeonScene extends Scene
 		super.update(deltaTime);
 
 		checkCollision();
-
 	}
 }

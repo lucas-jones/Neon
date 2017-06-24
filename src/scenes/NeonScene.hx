@@ -20,12 +20,6 @@ using milkshake.utils.TweenUtils;
 
 class NeonScene extends Scene
 {
-	public static inline var MODE_RED:String = "red";
-	public static inline var MODE_BLUE:String = "blue";
-
-	public static inline var RED:Int = 0xFF0000;
-	public static inline var BLUE:Int = 0x0099FF;
-
 	var redPillars:Array<DisplayObject>;
 	var bluePillars:Array<DisplayObject>;
 	var graphics(default, null):pixi.core.graphics.Graphics;
@@ -36,7 +30,7 @@ class NeonScene extends Scene
 	var verticalGridGap:Float;
 	var speed:Float = 5;
 
-	var mode:String = MODE_RED;
+	var gameColor:Int = Color.RED;
 
 	var input:Input;
 
@@ -58,7 +52,7 @@ class NeonScene extends Scene
 
 		createPillars();
 
-		addNode(player = new Player(), {
+		addNode(player = new Player(gameColor), {
 			position: new Vector2(400, 0)
 		});
 
@@ -69,7 +63,7 @@ class NeonScene extends Scene
 		];
 	}
 
-	private function drawGrid(color = Color.RED, rows:Int = 25, columns:Int = 20):Void
+	private function drawGrid():Void
 	{
 		var rows = 25;
 		var columns = 20;
@@ -78,7 +72,7 @@ class NeonScene extends Scene
 
 		graphics.clear();
 
-		graphics.lineStyle(1, color);
+		graphics.lineStyle(1, gameColor);
 		graphics.moveTo(0, 0);
 
 		//Top Horizontal Lines
@@ -114,7 +108,7 @@ class NeonScene extends Scene
 		}
 
 		bottomGraphics.clear();
-		bottomGraphics.beginFill(mode == MODE_RED ? RED : BLUE);
+		bottomGraphics.beginFill(gameColor);
 		bottomGraphics.drawRect(0, Globals.SCREEN_HEIGHT - 30, Globals.SCREEN_WIDTH, 30);
 	}
 
@@ -159,7 +153,7 @@ class NeonScene extends Scene
 
 	function updateGrid()
 	{
-		drawGrid(mode == MODE_RED ? RED : BLUE);
+		drawGrid();
 
 		verticalGridOffset += speed;
 
@@ -177,13 +171,13 @@ class NeonScene extends Scene
 			if(pillar.x < -200) pillar.x = 10 * 600;
 		}
 
-		for(pillar in bluePillars) pillar.alpha = (mode == MODE_RED) ? 0.4 : 1;
-		for(pillar in redPillars) pillar.alpha = (mode == MODE_BLUE) ? 0.4 : 1;
+		for(pillar in bluePillars) pillar.alpha = (gameColor == Color.RED) ? 0.4 : 1;
+		for(pillar in redPillars) pillar.alpha = (gameColor == Color.BLUE) ? 0.4 : 1;
  	}
 
     function checkCollision()
     {
-        //player.color = Color.RED;
+
     }
 
 	override public function update(deltaTime:Float):Void
@@ -194,7 +188,8 @@ class NeonScene extends Scene
 
 		if(input.isDown(Key.SHIFT))
 		{
-			mode = mode == MODE_RED ? MODE_BLUE : MODE_RED;
+			gameColor = gameColor == Color.RED ? Color.BLUE : Color.RED;
+            player.color = gameColor;
 		}
 
 

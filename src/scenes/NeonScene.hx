@@ -18,20 +18,32 @@ import scenes.gameobjects.Player;
 
 using milkshake.utils.TweenUtils;
 
-
 class NeonScene extends Scene
 {
+	public static inline var MODE_RED:String = "red";
+	public static inline var MODE_BLUE:String = "blue";
+
+	public static inline var RED:Int = 0xFF0000;
+	public static inline var BLUE:Int = 0x0099FF;
+
 	var redPillars:Array<DisplayObject>;
 	var bluePillars:Array<DisplayObject>;
 	var graphics(default, null):pixi.core.graphics.Graphics;
+	var bottomGraphics(default, null):pixi.core.graphics.Graphics;
 
 	var verticalGridOffset:Float = 0;
 	var verticalGridGap:Float;
 	var speed:Float = 5;
 
+	var mode:String = MODE_RED;
+
+	var input:Input;
+
 	public function new()
 	{
 		super("NeonScene", [  ], CameraPresets.DEFAULT, Color.BLUE);
+
+		input = new Input();
 	}
 
 	override public function create():Void
@@ -48,6 +60,8 @@ class NeonScene extends Scene
 		addNode(new Player(), {
 			position: new Vector2(400, 0)
 		});
+
+		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
 		this.displayObject.filters = [
 			new filters.CRTFilter()
@@ -97,6 +111,9 @@ class NeonScene extends Scene
 			graphics.moveTo(i * offset - verticalGridOffset / 2, Globals.SCREEN_HEIGHT / 1.5);
 			graphics.lineTo(-Globals.SCREEN_WIDTH / 2 + i * verticalGridGap - verticalGridOffset, Globals.SCREEN_HEIGHT);
 		}
+
+		bottomGraphics.beginFill(mode == MODE_RED ? RED : BLUE);
+		bottomGraphics.drawRect(0, Globals.SCREEN_HEIGHT - 30, Globals.SCREEN_WIDTH, 30);
 	}
 
 	function createPillars()
@@ -131,7 +148,7 @@ class NeonScene extends Scene
 	function generatePillar(height:Float, color:Int):milkshake.core.DisplayObject
 	{
 		var displayObject = new Graphics();
-		displayObject.graphics.beginFill(0, 0.5);
+		displayObject.graphics.beginFill(0, 0.8);
 		displayObject.graphics.lineStyle(2, color);
 		displayObject.graphics.drawRect(0, 0, 200, height);
 
@@ -140,7 +157,7 @@ class NeonScene extends Scene
 
 	function updateGrid()
 	{
-		drawGrid();
+		drawGrid(mode == MODE_RED ? RED : BLUE);
 
 		verticalGridOffset += speed;
 
@@ -163,6 +180,11 @@ class NeonScene extends Scene
 	{
 		updateGrid();
 		updatePillars();
+
+		if(input.isDown(Key.SHIFT))
+		{
+			mode = mode == MODE_RED ? MODE_BLUE : MODE_RED;
+		}
 
 		super.update(deltaTime);
 	}

@@ -1,6 +1,7 @@
 package scenes.gameobjects;
 
 import differ.shapes.Polygon;
+import milkshake.core.ParticleEmitter;
 import milkshake.Milkshake;
 import milkshake.assets.SpriteSheets;
 import milkshake.components.input.Input;
@@ -27,6 +28,7 @@ class Player extends milkshake.core.DisplayObject
 
 	var graphics:Graphics;
 	var input:Input;
+	var particles:ParticleEmitter;
 
 	public var velocity:Vector2;
 	public var onFloor:Bool = false;
@@ -80,7 +82,10 @@ class Player extends milkshake.core.DisplayObject
 		else if(input.isDown(Key.LEFT)) velocity.x = onFloor ? -10 : -15;
 		else velocity.x = 0;
 
-		
+		if(input.isDownOnce(Key.W))
+		{
+			die();
+		}
 
 		position.add(velocity);
 
@@ -96,5 +101,76 @@ class Player extends milkshake.core.DisplayObject
 		// {
 		// 	this.scale.tween(0.8, { x: 1.3, y: 0.7 }).ease(Elastic.easeIn).delay(0);
 		// });
+	}
+
+	public function die()
+	{
+		scene.addNode(particles = new ParticleEmitter([
+			Texture.fromImage('assets/images/player/particles/Pixel25px.png'),
+			Texture.fromImage('assets/images/player/particles/Pixel50px.png'),
+			Texture.fromImage('assets/images/player/particles/Pixel100px.png')
+		], 'death particles', {
+			"alpha": {
+				"start": 0.8,
+				"end": 0.7
+			},
+			"scale": {
+				"start": 1,
+				"end": 0.3,
+				"minimumScaleMultiplier": 1
+			},
+			"color": {
+				"start": color == Color.RED ? "#0000ff" : "#ff0000",
+				"end": color == Color.RED ? "#0000ff" : "#ff0000"
+			},
+			"speed": {
+				"start": 200,
+				"end": 200,
+				"minimumSpeedMultiplier": 1
+			},
+			"acceleration": {
+				"x": 0,
+				"y": 0
+			},
+			"maxSpeed": 0,
+			"startRotation": {
+				"min": 0,
+				"max": 0
+			},
+			"noRotation": false,
+			"rotationSpeed": {
+				"min": 0,
+				"max": 0
+			},
+			"lifetime": {
+				"min": 0.8,
+				"max": 0.8
+			},
+			"blendMode": "normal",
+			"frequency": 0.3,
+			"emitterLifetime": 0.41,
+			"maxParticles": 1000,
+			"pos": {
+				"x": 0,
+				"y": 0
+			},
+			"addAtBack": false,
+			"spawnType": "burst",
+			"particlesPerWave": 8,
+			"particleSpacing": 45,
+			"angleStart": 0
+		}),
+		{
+			position: position
+		});
+
+		alpha = 0;
+
+		haxe.Timer.delay(function() {
+			scene.removeNode(particles);
+			particles.emitter.destroy();
+			particles = null;
+			alpha = 1;
+		}, 3000);
 	}
 }

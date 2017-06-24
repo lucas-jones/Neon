@@ -12,5 +12,6 @@
 -lib pixijs
 -lib actuate
 -lib differ
+-lib pixi-particles
 
 -js bin/app.js

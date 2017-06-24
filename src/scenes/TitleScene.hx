@@ -1,21 +1,17 @@
 package scenes;
 
+import milkshake.components.input.Key;
+import milkshake.Milkshake;
+import pixi.extras.BitmapText;
 import milkshake.core.DisplayObject;
 import milkshake.utils.Color;
-import differ.Collision;
-import milkshake.components.input.Input;
-import milkshake.components.input.Key;
 import milkshake.game.scene.camera.CameraPresets;
 import milkshake.game.scene.Scene;
 import milkshake.math.Vector2;
-import milkshake.Milkshake;
 import milkshake.utils.Globals;
 import milkshake.utils.TweenUtils;
-import motion.actuators.IGenericActuator;
 import motion.easing.Sine;
-import scenes.gameobjects.GhostPlayer;
 import scenes.gameobjects.Pillar;
-import scenes.gameobjects.Player;
 
 using milkshake.utils.TweenUtils;
 
@@ -27,6 +23,8 @@ class TitleScene extends Scene
 
 	var graphics(default, null):pixi.core.graphics.Graphics;
 	var bottomGraphics(default, null):pixi.core.graphics.Graphics;
+	var text(default, null):pixi.extras.BitmapText;
+	var text2(default, null):pixi.extras.BitmapText;
 
 	var verticalGridOffset:Float = 0;
 	var verticalGridGap:Float;
@@ -38,7 +36,7 @@ class TitleScene extends Scene
 
 	public function new()
 	{
-		super("TitleScene", [  ], CameraPresets.DEFAULT);
+		super("TitleScene", [ 'assets/fonts/8bit_wonder/8bit_wonder.fnt' ], CameraPresets.DEFAULT);
 	}
 
 	override public function create():Void
@@ -54,14 +52,24 @@ class TitleScene extends Scene
 
 		displayObject.addChild(bottomGraphics = new pixi.core.graphics.Graphics());
 
+		displayObject.addChild(text = new pixi.extras.BitmapText("NEON", { font: "75px 8bit_wonder", tint: 0xFFFFFF}));
+		displayObject.addChild(text2 = new pixi.extras.BitmapText("INSERT COIN", { font: "32px 8bit_wonder", tint: 0xFFFFFF}));
+
+		text.position.x = 500;
+		text.position.y = 275;
+
+		text2.position.x = 500;
+		text2.position.y = 375;
+		text2.alpha = 0;
+
 
 		this.displayObject.filters = [
 			new filters.CRTFilter()
 		];
 
+		text2.tween(0.5, {alpha: 1}).ease(Sine.easeIn).repeat().reflect();
 		this.tween(5, { sceneAlpha: 1 }).ease(Sine.easeIn);
-
-		this.tween(100, { gameColor: Color.BLUE }).ease(Sine.easeInOut);
+		this.tween(100, { gameColor: Color.BLUE }).ease(Sine.easeInOut).repeat().reflect();
 	}
 
 	private function drawGrid():Void
@@ -170,6 +178,11 @@ class TitleScene extends Scene
 
 	override public function update(deltaTime:Float):Void
 	{
+		if(Milkshake.getInstance().input.isEitherDown([Key.SPACE, Key.ENTER]))
+		{
+			Milkshake.getInstance().scenes.changeScene('NeonScene');
+		}
+
 		updateGrid();
 		updatePillars();
 
